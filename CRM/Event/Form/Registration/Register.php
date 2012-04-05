@@ -867,6 +867,7 @@ class CRM_Event_Form_Registration_Register extends CRM_Event_Form_Registration
      *
      */
     static function checkProfileComplete($fields, &$errors, $eventId) {
+        $email = '';
         foreach ($fields as $fieldname => $fieldvalue) {
             if ( substr( $fieldname, 0, 6 ) == 'email-' && $fieldvalue ) {
                 $email = $fieldvalue;
@@ -878,7 +879,7 @@ class CRM_Event_Form_Registration_Register extends CRM_Event_Form_Registration
             require_once 'CRM/Event/BAO/Event.php';
             $defaults = $params = array('id' => $eventId);
             CRM_Event_BAO_Event::retrieve($params, $defaults);
-            $message = ts("Mandatory fields (first name and last name, OR email address) are missing from this form. Please contact the event organizer. %1", array(1 => $defaults['confirm_from_email']));
+            $message = ts("Mandatory fields (first name and last name, OR email address) are missing from this form.");
             $errors['profile_incomplete'] = $message;
             CRM_Utils_System::setUFMessage($message);
         }
