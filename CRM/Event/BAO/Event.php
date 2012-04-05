@@ -1040,7 +1040,8 @@ WHERE civicrm_event.is_active = 1
         }
         
         if ( $values['event']['is_email_confirm'] || $returnMessageText ) {
-            list($displayName, $email) = self::getEmailDetails($contactID, $values['params'], $values['event']);
+            require_once 'CRM/Contact/BAO/Contact/Location.php';
+            list( $displayName, $email ) = CRM_Contact_BAO_Contact_Location::getEmailDetails( $contactID );
 
             //send email only when email is present
             if ( isset( $email ) || $returnMessageText ) {
@@ -1121,22 +1122,6 @@ WHERE civicrm_event.is_active = 1
         }
     }
 
-
-    /**
-     * Function to get the email address and display name to send a confirmation to.
-     *
-     * @return array( $displayName, $email )
-     * @access public
-     */
-    static function getEmailDetails( $contactID, $params, $event ) {
-        if ( !$contactID ) {
-            require_once 'CRM/Contact/BAO/Contact.php';
-            $contact = CRM_Contact_BAO_Contact::add( $params );
-            $contactID = $contact->id;
-        }
-        require_once 'CRM/Contact/BAO/Contact/Location.php';
-        return CRM_Contact_BAO_Contact_Location::getEmailDetails( $contactID );
-    }
     
     /**  
      * Function to add the custom fields OR array of participant's
