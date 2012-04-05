@@ -1314,12 +1314,16 @@ class CRM_Event_Form_Registration_Register extends CRM_Event_Form_Registration
                 $dedupeParams['check_permission'] = false;
                 $ids       = CRM_Dedupe_Finder::dupesByParams( $dedupeParams, 'Individual', $level );
                 $contactID = CRM_Utils_Array::value( 0, $ids );
-            } else if ( isset( $fields["email-{$self->_bltID}"] ) ) {
-                $emailString = trim( $fields["email-{$self->_bltID}"] );
-                if ( ! empty( $emailString ) ) {
-                    $match = CRM_Contact_BAO_Contact::matchContactOnEmail( $emailString, 'Individual' ) ;
-                    if ( !empty( $match ) ) {
-                        $contactID = $match->contact_id;
+            } else {
+                foreach ($fields as $fieldname => $fieldvalue) {
+                    if ( substr( $fieldname, 0, 6 ) == 'email-') {
+                        $emailString = trim( $fieldvalue );
+                        if ( !empty( $emailString ) ) {
+                            $match = CRM_Contact_BAO_Contact::matchContactOnEmail( $emailString, 'Individual' );
+                            if ( !empty( $match )) {
+                                $contactID = $match->contact_id;
+                            }
+                        }
                     }
                 }
             }
