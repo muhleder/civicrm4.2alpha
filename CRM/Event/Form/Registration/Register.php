@@ -880,8 +880,7 @@ class CRM_Event_Form_Registration_Register extends CRM_Event_Form_Registration
             $defaults = $params = array('id' => $eventId);
             CRM_Event_BAO_Event::retrieve($params, $defaults);
             $message = ts("Mandatory fields (first name and last name, OR email address) are missing from this form.");
-            $errors['profile_incomplete'] = $message;
-            CRM_Utils_System::setUFMessage($message);
+            $errors['_qf_default'] = $message;
         }
     }
     
