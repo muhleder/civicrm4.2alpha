@@ -867,7 +867,13 @@ class CRM_Event_Form_Registration_Register extends CRM_Event_Form_Registration
      *
      */
     static function checkProfileComplete($fields, &$errors, $eventId) {
-        if (!$fields['email-Primary'] && !($fields['first_name'] && $fields['last_name'])) {
+        foreach ($fields as $fieldname => $fieldvalue) {
+            if ( substr( $fieldname, 0, 6 ) == 'email-' && $fieldvalue ) {
+                $email = $fieldvalue;
+            }
+        }
+
+        if (!$email && !($fields['first_name'] && $fields['last_name'])) {
             require_once 'CRM/Utils/System.php';
             require_once 'CRM/Event/BAO/Event.php';
             $defaults = $params = array('id' => $eventId);
