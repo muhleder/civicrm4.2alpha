@@ -1,0 +1,7 @@
+name = Multi Site support for CiviCRM
+description = Multi Site Support to support a PIRG like system
+version = 3.4
+dependencies[] = civicrm
+package = CiviCRM
+core = 6.x
+php = 5.2
