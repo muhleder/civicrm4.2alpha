@@ -1129,24 +1129,13 @@ WHERE civicrm_event.is_active = 1
      * @access public
      */
     static function getEmailDetails( $contactID, $params, $event ) {
-        require_once 'CRM/Contact/BAO/Contact/Location.php';
-        //use primary email address, since we are not creating billing address for
-        //1. participant is pay later.
-        //2. participant might be additional participant.
-        //3. participant might be on waiting list.
-        //4. registration might require approval.
-        if ( CRM_Utils_Array::value('is_pay_later', $params ) ||
-             CRM_Utils_Array::value('additionalParticipant', $params ) ||
-             CRM_Utils_Array::value('isOnWaitlist', $params ) ||
-             CRM_Utils_Array::value('isRequireApproval', $params ) ||
-             !CRM_Utils_Array::value('is_monetary', $event ) ) {
-            return CRM_Contact_BAO_Contact_Location::getEmailDetails( $contactID );
-        } else {
-            // get the billing location type
-            $locationTypes =& CRM_Core_PseudoConstant::locationType();
-            $bltID = array_search('Billing', $locationTypes);
-            return CRM_Contact_BAO_Contact_Location::getEmailDetails( $contactID, false, $bltID );
+        if ( !$contactID ) {
+            require_once 'CRM/Contact/BAO/Contact.php';
+            $contact = CRM_Contact_BAO_Contact::add( $params );
+            $contactID = $contact->id;
         }
+        require_once 'CRM/Contact/BAO/Contact/Location.php';
+        return CRM_Contact_BAO_Contact_Location::getEmailDetails( $contactID );
     }
     
     /**  
